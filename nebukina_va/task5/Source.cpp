@@ -29,9 +29,7 @@ void BubbleSort(unsigned long a[], char name[NFILES][length], long n)
 	}
 }
 
-int main(void)
-{
-	struct _finddata_t c_file;
+struct _finddata_t c_file;
 	intptr_t hFile;
 	char path[200];
 	long count;
@@ -70,8 +68,8 @@ int main(void)
 					count++;
 				}
 			    } while (_findnext(hFile, &c_file) == 0);
-			_findclose(hFile);				
-			printf("\nКоличество файлов: %d\n", count);
+			    _findclose(hFile);				
+			    printf("\nКоличество файлов: %d\n", count);
 				while ((sort < 1) || (sort > 3))
 				{
 					printf("Выберите метод сортировки:\n1) Пузырьком\n2) Выбором\n3) Вставками\n");
@@ -93,7 +91,7 @@ int main(void)
 				printf("Отсортированный список файлов:\n\n");
 				printf("FILE            SIZE\n", ' ');
 				printf("----            ----\n", ' ');
-				if (m == 1)
+				if (mode == 1)
 				{
 					for (i = 0; i < count; i++)
 					{
@@ -107,7 +105,7 @@ int main(void)
 					}
 				}
 				tt = double (t2 - t1);
-				printf("Время сортировки: %d клоков\n", tt);
+				printf("Время сортировки: %d\n", tt);
 				printf("Желаете изменить метод сортировки?\n0 - да, 1 - нет.\n");
 				scanf_s("%i", &m);
 				while ((m != 0) && (m != 1))
