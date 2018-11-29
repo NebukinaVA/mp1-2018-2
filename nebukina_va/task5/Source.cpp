@@ -168,5 +168,5 @@ int main(void)
 		}
 	}
 	scanf_s("%i", &end);
-	return 0;
+	_getch();
 }
