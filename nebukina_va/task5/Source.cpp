@@ -34,22 +34,20 @@ int main(void)
 	struct _finddata_t c_file;
 	intptr_t hFile;
 	char path[200];
-	long count = 0;
+	long count;
 	int n = 0;
 	int m = 0;
 	int end;
 	long i = 0;
-	int sort = 0;
-	int mode = 0;
+	int sort, mode;
 	clock_t t1, t2;
-	double tt;
+	double tt = 0;
 	unsigned long sizes[NFILES];
 	char names[NFILES][length];
 
 	setlocale(LC_ALL, "Rus");
 	while (n == 0) 
 	{
-		
 		printf("Введите имя каталога в формате C:\\\\...\\\\*\n");
 		gets_s(path, 200);
 		if ((hFile = _findfirst(path, &c_file)) == -1L)
@@ -60,17 +58,20 @@ int main(void)
 			printf("FILE            SIZE\n", ' ');
 			printf("----            ----\n", ' ');
 			do {
+		        sort = 0;
+		        mode = 0;
+				count = 0;
+				do {
 				if (count < NFILES)
 				{
 					strncpy(names[count], c_file.name, length);
 					sizes[count] = c_file.size;
-					printf("%-12.12s   %10ld\n", c_file.name, c_file.size);
+					printf("%-12.12s   %10lu\n", c_file.name, c_file.size);
 					count++;
 				}
-			} while (_findnext(hFile, &c_file) == 0);
+			    } while (_findnext(hFile, &c_file) == 0);
 			_findclose(hFile);				
 			printf("\nКоличество файлов: %d\n", count);
-			do {
 				while ((sort < 1) || (sort > 3))
 				{
 					printf("Выберите метод сортировки:\n1) Пузырьком\n2) Выбором\n3) Вставками\n");
@@ -96,16 +97,16 @@ int main(void)
 				{
 					for (i = 0; i < count; i++)
 					{
-						printf("%-12.12s %10u\n", names[i], sizes[i]);
+						printf("%-12.12s %10lu\n", names[i], sizes[i]);
 					}
 				}
 				else {
 					for (i = count - 1; i >= 0; i--)
 					{
-						printf("%-12.12s %10u\n", names[i], sizes[i]);
+						printf("%-12.12s %10lu\n", names[i], sizes[i]);
 					}
 				}
-				tt = long double (t2 - t1) / CLOCKS_PER_SEC;
+				tt = double (t2 - t1);
 				printf("Время сортировки: %d клоков\n", tt);
 				printf("Желаете изменить метод сортировки?\n0 - да, 1 - нет.\n");
 				scanf_s("%i", &m);
@@ -115,13 +116,7 @@ int main(void)
 					scanf_s("%i", &m);
 				}
 			} while (m == 0);
-			printf("Желаете отсортировать другой репозиторий?\n0 - да, 1 - нет.\n");
-			scanf_s("%i", &n);
-			while ((n != 0) && (n != 1))
-			{
-				printf("Введите 0 или 1.\n");
-				scanf_s("%i", &n);
-			}
+			n = 1;			
 		}
 	}
 	scanf_s("%i", &end);
