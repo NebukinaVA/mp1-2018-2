@@ -8,6 +8,47 @@
 #include <string.h>
 #include <locale.h>
 
+void SelectSort(unsigned long a[], char name[NFILES][length], long n)
+{
+	long i, j, k;
+	unsigned long x;
+	char p[200];
+	for (i = 0; i < n; i++)  	
+	{
+		k = i; x = a[i];
+		for (j = i + 1; j < n; j++)	
+		{
+			if (a[j] < x)
+			{
+				k = j; x = a[j];	         
+			}
+			a[k] = a[i]; a[i] = x;   	
+			strncpy(p, name[k], length);
+			strncpy(name[k], name[i], length);
+			strncpy(name[i], p, length);
+		}
+	}
+}
+
+void InsertSort(unsigned long a[], char name[NFILES][length], long n)
+{
+	unsigned long x;
+	long i, j;
+	char p[200];
+	for (i = 0; i < n; i++)   
+	{
+		x = a[i];
+		strncpy(p, name[i], 32);
+		for (j = i - 1; (j >= 0) && (a[j] > x); j--)
+		{
+			a[j + 1] = a[j]; 
+			strncpy(name[j + 1], name[j], length);
+		}                      
+		a[j + 1] = x;
+		strncpy(name[j + 1], p, length);
+	}
+}
+
 void BubbleSort(unsigned long a[], char name[NFILES][length], long n)
 {
 	long i, j;
@@ -29,10 +70,12 @@ void BubbleSort(unsigned long a[], char name[NFILES][length], long n)
 	}
 }
 
-struct _finddata_t c_file;
+int main(void)
+{
+	struct _finddata_t c_file;
 	intptr_t hFile;
 	char path[200];
-	long count;
+	long count = 0;
 	int n = 0;
 	int m = 0;
 	int end;
@@ -54,12 +97,8 @@ struct _finddata_t c_file;
 		{
 			printf("Список файлов:\n\n");
 			printf("FILE            SIZE\n", ' ');
-			printf("----            ----\n", ' ');
+			printf("----            ----\n", ' ');	
 			do {
-		        sort = 0;
-		        mode = 0;
-				count = 0;
-				do {
 				if (count < NFILES)
 				{
 					strncpy(names[count], c_file.name, length);
@@ -67,8 +106,11 @@ struct _finddata_t c_file;
 					printf("%-12.12s   %10lu\n", c_file.name, c_file.size);
 					count++;
 				}
-			    } while (_findnext(hFile, &c_file) == 0);
-			    _findclose(hFile);				
+			} while (_findnext(hFile, &c_file) == 0);
+		    _findclose(hFile);		
+			do {
+		        sort = 0;
+		        mode = 0;			
 			    printf("\nКоличество файлов: %d\n", count);
 				while ((sort < 1) || (sort > 3))
 				{
@@ -87,6 +129,14 @@ struct _finddata_t c_file;
 					BubbleSort(sizes, names, count);
 					t2 = clock();
 					break;
+				case 2:
+					t1 = clock();
+					SelectSort(sizes, names, count);
+					t2 = clock();
+				case 3: 
+					t1 = clock();
+					InsertSort(sizes, names, count);
+					t2 = clock();
 				}
 				printf("Отсортированный список файлов:\n\n");
 				printf("FILE            SIZE\n", ' ');
