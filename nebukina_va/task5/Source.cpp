@@ -154,7 +154,7 @@ int main(void)
 						printf("%-12.12s %10lu\n", names[i], sizes[i]);
 					}
 				}
-				tt = double (t2 - t1);
+				tt = double (t2 - t1) / CLOCKS_PER_SEC;
 				printf("Время сортировки: %d\n", tt);
 				printf("Желаете изменить метод сортировки?\n0 - да, 1 - нет.\n");
 				scanf_s("%i", &m);
@@ -167,6 +167,4 @@ int main(void)
 			n = 1;			
 		}
 	}
-	scanf_s("%i", &end);
-	_getch();
 }
