@@ -155,7 +155,7 @@ int main(void)
 					}
 				}
 				tt = double (t2 - t1) / CLOCKS_PER_SEC;
-				printf("Время сортировки: %d\n", tt);
+				printf("Время сортировки: %f\n", tt);
 				printf("Желаете изменить метод сортировки?\n0 - да, 1 - нет.\n");
 				scanf_s("%i", &m);
 				while ((m != 0) && (m != 1))
