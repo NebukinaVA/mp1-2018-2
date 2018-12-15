@@ -5,143 +5,129 @@
 #include <locale.h>
 #include <math.h>
 
-long double F(long n)
+long double mysin(double x, long double precision, int& N, long double stand)
 {
-	long i;
-	long fact = 1;
-	for (i = 1; i <= n; i++)
+	long double y = x;
+	long double res = x;
+	int i;
+	for (i = 2; (i <= N) && (fabsl(stand - y) >= precision); i++)
 	{
-		fact *= i;
+		res *= (-1) * ((x * x) / ((2 * i - 2) * (2 * i - 1)));
+		y = y + res;
 	}
-	return fact;
-}
-
-long double mysin(long double x, long double accuracy, long N, int *mycount)
-{
-	long double y = 0;
-	long i, j;
-	int count;
-	for (i = 0; i <= N; i++)
-	{
-		y = y + ((-1) ^ i)*(pow(x, (2 * i + 1))) / (F(2 * i + 1));
-	if // условие
-		
-	}
-	*mycount = count++;
+	N = i - 1;
 	return y;
 }
 
-long double mycos(long double x, long double accuracy, long N)
+long double mycos(double x, long double precision, int& N, long double stand)
 {
-	long double y = 0;
-	long i, j;
-	for (i = 0; i <= N; i++)
+	long double y = 1;
+	long double res = 1;
+	int i;
+	for (i = 2; (i <= N) && (fabsl(stand - y) >= precision); i++)
 	{
-		y = y + ((-1) ^ i)*(pow(x, (2 * i))) / (F(2 * i)); 
+		res *= (-1) * ((x * x) / ((2 * i - 2) * (2 * i - 3)));
+		y = y + res;
 	}
+	N = i - 1;
 	return y;
 }
 
-long double myexp(long double x, long double accuracy, long N)
+long double myexp(double x, long double precision, int& N, long double stand)
 {
-	long double y = 0;
-	long i, j;
-	for (i = 0; i <= N; i++)
+	long double y = 1;
+	long double res = 1;
+	int i;
+	for (i = 2; (i <= N) && (fabsl(stand - y) >= precision); i++)
 	{
-		y = y + (pow(x, i)) / (F(i)); 
+		res = (res * x) / (i - 1);
+		y = y + res;
 	}
+	N = i - 1;
 	return y;
 }
 
-long double myarsh(long double x, long double accuracy, long N)
+long double myarsh(double x, long double precision, int& N, long double stand)
 {
-	long double y = 0;
-	long i;
-	for (i = 0; i <= N; i++)
+	long double y = x;
+	long double res = x;
+	int i;
+	for (i = 2; (i <= N) && (fabsl(stand - y) >= precision); i++)
 	{
-		// функция arsh!!!
+		res *= (-1) * (x * x) * (2 * i - 3) * (2 * i - 3) / ((2 * i - 2) * (2 * i - 1));
+		y = y + res;
 	}
+	N = i - 1;
 	return y;
 }
 
 int main()
 {
 	double x;
-	long double accuracy, etalon, myresult;
-	long double delta;
-	long N = 0;
-	long count;
+	long double precision, stand, myresult = 0;
+	long double delta = 0;
+	int N = 0;
 	int NMax = 0;
-	int funct = 0;
+	int f_num = 0;
 	int mode = 0;
-	int*pn;
+	int add;
 	void(*p)();
-	long double (*function[4])
+	long double(*myfunct[4])(double, long double, int&, long double);
+	myfunct[0] = mysin;
+	myfunct[1] = mycos;
+	myfunct[2] = myexp;
+	myfunct[3] = myarsh;
+	double(*funct[5])(double);
+	funct[0] = exp;
+	funct[1] = sin;
+	funct[2] = cos;
+	funct[3] = asinh;
 
 	setlocale(LC_ALL, "Rus");
 	while ((mode != 1) && (mode != 2))
 	{
-    printf("Выберите режим:\n1) Однократный расчет функции в заданной точке.\n2) Серийный эксперимент.\n");
-	scanf_s("%i", &mode);
+		printf("Выберите режим:\n1) Однократный расчет функции в заданной точке.\n2) Серийный эксперимент.\n");
+		scanf_s("%i", &mode);
 	}
+	while ((f_num < 1) || (f_num > 4))
+	{
+			printf("Выберите функцию из предложенных:\n1) sin(x)\n2) cos(x)\n3) exp(x)\n4) arsh(x)\n");
+			scanf_s("%i", &f_num);
+	}
+	printf("Введите точку x, в которой необходимо вычислить значение.\n");
+	scanf_s("%lf", &x);
+	stand = funct[f_num - 1](x);
 	if (mode == 1)
 	{
-		while ((funct < 1) || (funct > 4))
-		{
-		printf("Выберите функцию из предложенных:\n1) sin(x)\n2) cos(x)\n3) exp(x)\n4) arsh(x)\n");
-		scanf_s("%i", &funct);
-		}
-		printf("Введите точку x, в которой необходимо вычислить значение.\n");
-		scanf_s("%f", &x);
 		printf("Введите желаемую точность результата (0,000001 или больше).\n");
-		scanf_s("%f", &accuracy);
+	    scanf_s("%lf", &precision);
 		while ((N < 1) || (N > 1000))
 		{
 			printf("Задайте число элементов ряда для выполнения расчета (от 1 до 1000):\n");
-			scanf_s("%d", &N);
+			scanf_s("%i", &N);
 		}
-
-		switch (funct)
-		{
-		case 1:
-			etalon = sin(x);
-			myresult = mysin(x, accuracy, N);
-		case 2:
-			etalon = cos(x);
-			myresult = mycos(x, accuracy, N);
-		case 3:
-			etalon = exp(x);
-			myresult = myexpn(x, accuracy, N);
-		case 4:
-			etalon = arsh(x);
-			myresult = myarsh(x, accuracy, N);
-		}
-		delta = fabsl(etalon - myresult); // по модулю
-		printf("Эталонное значение в точке x: %lf", etalon);
+		myresult = myfunct[f_num - 1](x, precision, N, stand);
+		delta = fabsl(stand - myresult);
+		printf("Эталонное значение в точке x: %lf\n", stand);
 		printf("Вычисленная оценка значения функции в точке x: %lf\n", myresult);
 		printf("Разница между оценкой и эталонным значением в точке x: %lf\n", delta);
-		printf("Количество слагаемых, которое было вычислено: %li\n", count);
+		printf("Количество слагаемых, которое было вычислено: %li\n", N);
 	}
 	else
 	{
-		while ((funct < 1) || (funct > 4))
-		{
-			printf("Выберите функцию из предложенных:\n1) sin(x)\n2) cos(x)\n3) exp(x)\n4) arsh(x)\n");
-			scanf_s("%i", &funct);
-		}		
-		printf("Введите точку x, в которой необходимо вычислить значение.\n");
-		scanf_s("%f", &x);
 		while ((NMax < 1) || (NMax > 25))
 		{
 			printf("Задайте число экспериментов NMax (от 1 до 25).\n");
 			scanf_s("%d", &NMax);
 		}
-		printf("Эталонное значение в точке x: %f", etalon); 
-		printf("NMax            ОЦЕНКА            РАЗНИЦА МЕЖДУ ОЦЕНКОЙ И ЗНАЧЕНИЕМ\n")
-		printf("___________________________________________________________________\n\n");
+		delta = fabsl(stand - myresult);
+		printf("  N           ЭТАЛОН          ОЦЕНКА          РАЗНИЦА\n");
+		printf("_____________________________________________________\n\n");
 		for (int i = 1; i <= NMax; i++)
 		{
-			printf("%-12.12i %10lf %10lf\n", Nmax, myresult, delta); 
+			myresult = myfunct[f_num - 1](x, 0, i, stand);
+			printf("%3i %17lf %15lf %15lf\n", i, stand, myresult, delta);
 		}
 	}
+	scanf_s("%i", &NMax);
 }
