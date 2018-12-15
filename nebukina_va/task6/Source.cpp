@@ -78,9 +78,9 @@ int main()
 	myfunct[2] = myexp;
 	myfunct[3] = myarsh;
 	double(*funct[5])(double);
-	funct[0] = exp;
-	funct[1] = sin;
-	funct[2] = cos;
+	funct[0] = sin;
+	funct[1] = cos;
+	funct[2] = exp;
 	funct[3] = asinh;
 
 	setlocale(LC_ALL, "Rus");
@@ -126,8 +126,9 @@ int main()
 		for (int i = 1; i <= NMax; i++)
 		{
 			myresult = myfunct[f_num - 1](x, 0, i, stand);
+			delta = fabsl(stand - myresult);
 			printf("%3i %17lf %15lf %15lf\n", i, stand, myresult, delta);
 		}
 	}
-	scanf_s("%i", &NMax);
-}
+	_getch();
+} 
