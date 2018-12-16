@@ -11,7 +11,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClCompile Include="Source1.cpp">
+=======
+    <ClCompile Include="Source.cpp">
+>>>>>>> 399ea6102c3508ee8d350c139f0fc58b956b6db9
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
