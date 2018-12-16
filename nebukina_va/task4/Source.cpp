@@ -9,7 +9,8 @@ int main()
 {
 	setlocale(LC_ALL, "Rus");
 	srand(time(NULL));
-	int i, n, cash, number, end;
+	int i, n, cash, number, end, DISC;
+	int TOT = 0;
 	int sum = 0;
 	int amount[l] = { 0 };
 	int code[l] = { 1238, 5349, 6357, 4562, 7589 };
@@ -54,7 +55,9 @@ int main()
 	{
 		total[i] = amount[i] * (price[i] * (100 - discount[i]) / 100);
 		sum += total[i];
+		TOT += amount[i] * price[i];
 	}
+	DISC = TOT - sum;
 	printf("*йюяянбши вей*\n");
 	for (i = 0; i < l; i++)
 	{
@@ -64,6 +67,6 @@ int main()
 			printf("йнк-бн %i,  ясллю %i пса.\n", amount[i], total[i]);
 		}
 	}
-	printf("хрнц %i пса.", sum);
+	printf("ярнхлнярэ рнбюпнб б онйсойе %i пса.\nясллюпмюъ яйхдйю %i пса.\nхрнц %i пса.", TOT, DISC, sum);
 	scanf_s("%i", &end);
 }
